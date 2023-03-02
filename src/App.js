@@ -1,25 +1,23 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from "react";
+import FormBlock from "./components/FormBlock/FormBlock";
+import CustomModal from "./components/Modal/Modal";
 
-function App() {
+const App = () => {
+  const [show, setShow] = useState(false);
+  const [message, setMessage] = useState("");
+
+  const onModalOpen = (message) => {
+    setMessage(message);
+    setShow(true);
+    setTimeout(() => setShow(false), 2000);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="app">
+      <FormBlock onModalOpen={onModalOpen} />
+      <CustomModal title={message} show={show} />
     </div>
   );
-}
+};
 
 export default App;

@@ -1,0 +1,38 @@
+.form {
+  box-shadow: 4px 4px 27px -8px rgba(34, 60, 80, 0.2);
+  border-radius: 20px;
+  padding: 20px;
+
+  &__wrapper {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+  }
+
+  &__button {
+    width: 100%;
+  }
+
+  &__group {
+    position: relative;
+  }
+
+  &__error {
+    position: absolute;
+    bottom: -6px;
+    left: 12px;
+    margin: 0;
+    color: red;
+    background: #fff;
+    line-height: 1;
+    font-size: 0.8rem;
+    &_static {
+      position: static;
+      background: none
+    }
+  }
+
+  &__address {
+    transition: all .3s ease;
+  }
+}
