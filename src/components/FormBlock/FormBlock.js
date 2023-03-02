@@ -1,6 +1,7 @@
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import Inputmask from "inputmask";
 
 import "./formBlock.scss";
@@ -8,27 +9,35 @@ import "./formBlock.scss";
 import { useInput } from "../hooks/validation.hook";
 
 const FormBlock = (props) => {
-  const [data, setData] = useState({});
   const [globalDirty, setGlobalDirty] = useState(false);
+  const userData = useSelector((state) => state);
+  const dispatch = useDispatch();
 
-  const name = useInput("", "name", data, setData, {
+  const name = useInput("", "name", userData, dispatch, {
     required: true,
     symbols: true,
   });
-  const surname = useInput("", "surname", data, setData, { symbols: true });
-  const sex = useInput("", "sex", data, setData, { required: true });
-  const phone = useInput("", "phone", data, setData, { phone: true });
-  const email = useInput("", "email", data, setData, {
+  const surname = useInput("", "surname", userData, dispatch, {
+    symbols: true,
+  });
+  const sex = useInput("", "sex", userData, dispatch, { required: true });
+  const phone = useInput("", "phone", userData, dispatch, { phone: true });
+  const email = useInput("", "email", userData, dispatch, {
     required: true,
     email: true,
   });
-  const date = useInput("", "date", data, setData, { required: false });
-  const country = useInput("", "country", data, setData, { required: false });
-  const address = useInput("", "address", data, setData, { required: false });
+  const date = useInput("", "date", userData, dispatch);
+  const country = useInput("", "country", userData, dispatch);
+  const address = useInput("", "address", userData, dispatch);
 
   const accessibility = Math.round(Math.random());
 
-  const validattion = email.inputValid && name.inputValid && sex.inputValid;
+  const validattion =
+    email.inputValid &&
+    name.inputValid &&
+    sex.inputValid &&
+    phone.inputValid &&
+    surname.inputValid;
 
   useEffect(() => {
     Inputmask({
@@ -43,6 +52,8 @@ const FormBlock = (props) => {
 
     setGlobalDirty(true);
 
+    console.log(validattion);
+
     if (validattion) {
       setGlobalDirty(false);
 
@@ -50,7 +61,7 @@ const FormBlock = (props) => {
         fetch("https://jsonplaceholder.typicode.com/posts", {
           method: "POST",
           body: JSON.stringify({
-            ...data,
+            ...userData,
           }),
           headers: {
             "Content-type": "application/json; charset=UTF-8",
@@ -63,7 +74,7 @@ const FormBlock = (props) => {
   };
 
   const addresStyle =
-    country.value !== "Выбрать из списка"
+    country.value !== "Выбрать из списка" && country.value.length > 0
       ? { display: "block" }
       : { display: "none" };
 

@@ -1,25 +1,24 @@
 import { useState, useEffect } from "react";
 
-const useInput = (initialValue, inputName, data, setData, validations) => {
+const useInput = (initialValue, inputName, data, dispatch, validations) => {
   const [isDirty, setDirty] = useState(false);
 
   const initial = localStorage.getItem(inputName)
     ? localStorage.getItem(inputName)
     : initialValue;
 
-  // для redux
   useEffect(() => {
-    setData((data) => ({
-      ...data,
-      [inputName]: localStorage.getItem(inputName),
-    }));
+    dispatch({
+      type: "SET",
+      payload: { [inputName]: localStorage.getItem(inputName) },
+    });
   }, []);
 
   const [value, setValue] = useState(initial);
 
   const onChange = (e) => {
     setValue(e.target.value);
-    setData((data) => ({ ...data, [e.target.name]: e.target.value })); // для redux
+    dispatch({ type: "SET", payload: { [e.target.name]: e.target.value } });
     localStorage.setItem(inputName, e.target.value);
   };
 
@@ -39,7 +38,7 @@ const useInput = (initialValue, inputName, data, setData, validations) => {
 };
 
 const useValidation = (value, validations) => {
-  const [isEmpty, setEmpty] = useState(true);
+  const [isEmpty, setEmpty] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [inputValid, setInputValid] = useState(false);
 
