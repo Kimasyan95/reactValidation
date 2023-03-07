@@ -60,11 +60,13 @@ const useValidation = (value, validations) => {
 
           break;
         case "symbols":
-          value.split("").forEach((el) => {
-            symbols.includes(el)
-              ? setErrorMessage("Поле не должно содержать символы")
-              : setErrorMessage("");
-          });
+          if (value.split("").some((el) => {
+            return symbols.includes(el)
+          })) {
+            setErrorMessage("Поле не должно содержать символы")
+          } else {
+            setErrorMessage("");
+          }
           break;
         case "phone":
           value.replace(/[^\d]/g, "").length < 11 &&
